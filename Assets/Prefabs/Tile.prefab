@@ -45,7 +45,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4285815209501910
 Transform:
   m_ObjectHideFlags: 1
@@ -139,7 +139,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   touchEffectSpeed: 0.1
-  tileAnimationSpeed: 0.2
+  tileAnimationSpeed: 0.1
+  newColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
 --- !u!212 &212586387334165160
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -176,7 +177,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 098810b49828844458a52ae72a94e484, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

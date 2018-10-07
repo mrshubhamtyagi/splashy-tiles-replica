@@ -375,26 +375,6 @@ Prefab:
       propertyPath: tilePrefab
       value: 
       objectReference: {fileID: 1719708552}
-    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
-        type: 2}
-      propertyPath: tileColors.Array.data[0].r
-      value: 0.37254903
-      objectReference: {fileID: 0}
-    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
-        type: 2}
-      propertyPath: tileColors.Array.data[0].b
-      value: 0.26666668
-      objectReference: {fileID: 0}
-    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
-        type: 2}
-      propertyPath: tileColors.Array.data[0].g
-      value: 0.9921569
-      objectReference: {fileID: 0}
-    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
-        type: 2}
-      propertyPath: tileColors.Array.data[8].r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63f980a7962654dac9b4d092975f88be, type: 2}
   m_IsPrefabAsset: 0

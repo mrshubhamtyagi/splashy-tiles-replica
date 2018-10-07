@@ -6,11 +6,11 @@ public class TileSpawner : MonoBehaviour
 {
     public Transform tilePrefab;
     public Vector3 tileOffset; // next tile distance
-    public float tileAnimationDistance = 10f;
+    public float tileAnimDistance = 10f;
 
     [Header("Color Stuff")]
     public bool randomColor = true;
-    public float colorChangeAnimSpeed = 0.01f;
+    public float tilesColorChangeSpeed = 0.01f;
     public Color[] tileColors;
 
 
@@ -36,7 +36,7 @@ public class TileSpawner : MonoBehaviour
             SpawnTileFromPool();
 
         if (Input.GetKeyDown(KeyCode.Backspace))
-            StartCoroutine(Co_ChangeTilesColor(tileColors[GetRandomNumber(0, tileColors.Length)], colorChangeAnimSpeed));
+            StartCoroutine(Co_ChangeTilesColor(tileColors[GetRandomNumber(0, tileColors.Length)], tilesColorChangeSpeed));
     }
 
     [ContextMenu("SpawnTile")]
@@ -70,25 +70,19 @@ public class TileSpawner : MonoBehaviour
             print("New Tile is Generated");
         }
 
-        Vector3 _tilePos = GetNextPositionFromRange();
+        Vector3 _tilePos = GetNextPositionFromRange(); // get random position
         _tile.GetComponent<Tile>().SetTilePosition(_tilePos);
-        _tile.localPosition = new Vector3(_tilePos.x, _tilePos.y, _tilePos.z + 5f);
+        _tile.localPosition = new Vector3(_tilePos.x, _tilePos.y, _tilePos.z + tileAnimDistance); // tile animation distance
         _tile.rotation = Quaternion.identity;
 
+
+        // set tile color
         if (randomColor)
             _tile.GetComponent<MeshRenderer>().material.color = tileColors[GetRandomNumber(0, tileColors.Length)];
         else
             _tile.GetComponent<MeshRenderer>().material.color = tileColors[0];
+
         _tile.gameObject.SetActive(true);
-    }
-
-
-    private Vector3 GetNextTilePosition()
-    {
-        Vector3 _position = new Vector3(Random.Range(-(tileOffset.x), tileOffset.x), prevTilePosition.y, tileOffset.z);
-        _position += prevTilePosition;
-        prevTilePosition = _position;
-        return _position;
     }
 
     public IEnumerator Co_ChangeTilesColor(Color newColor, float waitTime = 0.1f)
@@ -99,8 +93,19 @@ public class TileSpawner : MonoBehaviour
                 continue;
 
             yield return new WaitForSeconds(waitTime);
-            tiles[i].GetComponent<MeshRenderer>().material.color = newColor;
+            //tiles[i].GetComponent<MeshRenderer>().material.color = newColor;
+            tiles[i].GetComponent<Tile>().EffectColorSetup();
+            tiles[i].GetComponent<Tile>().newColor = newColor;
         }
+    }
+
+
+    private Vector3 GetNextTilePosition()
+    {
+        Vector3 _position = new Vector3(Random.Range(-(tileOffset.x), tileOffset.x), prevTilePosition.y, tileOffset.z);
+        _position += prevTilePosition;
+        prevTilePosition = _position;
+        return _position;
     }
 
     private Vector3 GetNextPositionFromRange()
@@ -129,5 +134,4 @@ public class TileSpawner : MonoBehaviour
     {
         return Random.Range(start, end);
     }
-
 }

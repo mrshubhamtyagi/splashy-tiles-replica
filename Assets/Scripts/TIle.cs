@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public float touchEffectSpeed = 0.1f;
-    public float tileAnimationSpeed = 0.3f;
+    public float hitEffectSpeed = 0.1f;
+    public float tileSpawnAnimSpeed = 0.3f;
 
     private Vector3 tileFinalPosition;
+    [HideInInspector] public Color newColor;
 
     #region Touch Effect 
     private SpriteRenderer effectSpriteRenderer;
@@ -36,9 +37,10 @@ public class Tile : MonoBehaviour
         //StartCoroutine(DeactivateTile(10));
     }
 
-    private void EffectColorSetup()
+    public void EffectColorSetup()
     {
         tileColor = GetComponent<MeshRenderer>().material.color;
+        newColor = tileColor;
         effectSpriteRenderer.transform.localScale = Vector3.zero;
         effectSpriteRenderer.color = tileColor;
         colorAlpha = 255f;
@@ -50,25 +52,27 @@ public class Tile : MonoBehaviour
     {
         EffectLerp();
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileAnimationSpeed);
-
+        transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileSpawnAnimSpeed);
+        GetComponent<MeshRenderer>().material.color =
+                                        Color.Lerp(GetComponent<MeshRenderer>().material.color, newColor, hitEffectSpeed);
     }
 
     private void EffectLerp()
     {
         // Scale
-        effectSpriteRenderer.transform.localScale = Vector3.Lerp(effectSpriteRenderer.transform.localScale, effectScale, touchEffectSpeed);
+        effectSpriteRenderer.transform.localScale = Vector3.Lerp(effectSpriteRenderer.transform.localScale, effectScale, hitEffectSpeed);
 
         // Color
-        tileColor.a = (byte)Mathf.Lerp(tileColor.a, colorAlpha, touchEffectSpeed);
+        tileColor.a = (byte)Mathf.Lerp(tileColor.a, colorAlpha, hitEffectSpeed);
         effectSpriteRenderer.color = tileColor;
     }
 
-    public void TouchEffect()
+    public void OnHitEffect()
     {
         effectSpriteRenderer.gameObject.SetActive(true);
-        effectScale = Vector3.one * 20;
+        effectScale = Vector3.one * 30;
         colorAlpha = 0f;
+        tileFinalPosition.y = -1f;
     }
 
     public void SetTilePosition(Vector3 position)
@@ -84,6 +88,14 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        TouchEffect();
+        OnHitEffect();
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            OnHitEffect();
+        }
     }
 }
