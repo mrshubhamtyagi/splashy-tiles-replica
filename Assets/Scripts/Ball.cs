@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    public float speed;
+    public float sideSpeed;
+    public float forwardSpeed;
 
     private Rigidbody rb;
     private float inputHorizontal;
@@ -31,9 +32,10 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float _x = speed * inputHorizontal * Time.fixedDeltaTime;
-        velocity = new Vector3(_x, rb.velocity.y, rb.velocity.z);
+        velocity.z = forwardSpeed * Time.fixedDeltaTime;
+        velocity.x = sideSpeed * inputHorizontal * Time.fixedDeltaTime;
+
         rb.velocity = velocity;
-        rb.transform.position = new Vector3(Mathf.Clamp(rb.transform.position.x, -3f, 3f), Mathf.Clamp(rb.transform.position.y, -10f, 2f), rb.velocity.z);
+        //rb.transform.position = new Vector3(Mathf.Clamp(rb.transform.position.x, -3f, 3f), Mathf.Clamp(rb.transform.position.y, -10f, 2f), rb.velocity.z);
     }
 }

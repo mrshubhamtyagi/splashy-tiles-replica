@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1105545438376394}
+  m_IsPrefabAsset: 1
+--- !u!1 &1105545438376394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4233489845862760}
+  - component: {fileID: 114269468350773538}
+  m_Layer: 0
+  m_Name: TileSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4233489845862760
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1105545438376394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114269468350773538
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1105545438376394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e52ea4b9c0eb4598ada97a3a378fcc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 0}
+  tileOffset: {x: 1.5, y: 0, z: 2}
+  tileAnimationDistance: 10
+  tileColors:
+  - {r: 1, g: 1, b: 0.19339621, a: 1}
+  - {r: 1, g: 0.7225406, b: 0.19215685, a: 1}
+  - {r: 1, g: 0.3010729, b: 0.19215685, a: 1}
+  - {r: 1, g: 0.19215685, b: 0.6284534, a: 1}
+  - {r: 0.7659335, g: 0.19215685, b: 1, a: 1}
+  - {r: 0.19215685, g: 0.37988645, b: 1, a: 1}
+  - {r: 0.19215685, g: 0.7674828, b: 1, a: 1}
+  - {r: 0.19215685, g: 1, b: 0.753029, a: 1}
+  - {r: 0.33672565, g: 1, b: 0.19215685, a: 1}
+  randomColor: 0

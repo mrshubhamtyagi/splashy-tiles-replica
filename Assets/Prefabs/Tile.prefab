@@ -138,7 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd533ee74ca448858a290c24f21f60f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lerpValue: 0.1
+  touchEffectSpeed: 0.1
+  tileAnimationSpeed: 0.2
 --- !u!212 &212586387334165160
 SpriteRenderer:
   m_ObjectHideFlags: 1
