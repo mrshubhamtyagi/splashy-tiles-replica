@@ -54,8 +54,9 @@ MonoBehaviour:
   tilePrefab: {fileID: 0}
   tileOffset: {x: 1.5, y: 0, z: 2}
   tileAnimDistance: 10
-  randomColor: 1
-  tilesColorChangeSpeed: 0.03
+  randomX: 0
+  randomColor: 0
+  tilesColorChangeSpeed: 0.01
   tileColors:
   - {r: 0.37254903, g: 0.9921569, b: 0.26666668, a: 1}
   - {r: 1, g: 0.7225406, b: 0.19215685, a: 1}

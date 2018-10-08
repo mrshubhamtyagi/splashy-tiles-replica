@@ -7,11 +7,8 @@ public class Tile : MonoBehaviour
     public float hitEffectSpeed = 0.1f;
     public float tileSpawnAnimSpeed = 0.3f;
     public float force = 2f;
-
-    [HideInInspector] public Color newColor;
-    private Vector3 tileFinalPosition;
-    private TileSpawner tileSpawner;
-
+    public float moveSpeed = 2f;
+    public bool move;
 
     #region Touch Effect 
     private SpriteRenderer effectSpriteRenderer;
@@ -19,6 +16,11 @@ public class Tile : MonoBehaviour
     private Vector3 effectScale;
     private float colorAlpha;
     #endregion
+
+    [HideInInspector] public Color newColor;
+    private Vector3 tileFinalPosition;
+    private TileSpawner tileSpawner;
+    private bool isLerpEnable;
 
     private void Awake()
     {
@@ -30,21 +32,17 @@ public class Tile : MonoBehaviour
         tileSpawner = FindObjectOfType<TileSpawner>();
     }
 
-    private void Start()
-    {
-        FadeEffectSetup();
-    }
-
     private void OnEnable()
     {
         FadeEffectSetup();
-
-        //StartCoroutine(DeactivateTile(10));
+        isLerpEnable = true;
+        Invoke("DisableLerp", 0.2f);
     }
 
-    private void OnDisable()
+    private void OnBecameInvisible()
     {
-        //tileSpawner.RemoveFromList(GetComponent<Tile>());
+        gameObject.SetActive(false);
+        //tileSpawner.SpawnTileFromPool();
     }
 
     public void FadeEffectSetup()
@@ -61,8 +59,8 @@ public class Tile : MonoBehaviour
     void Update()
     {
         EffectLerp();
+        MoveTile();
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileSpawnAnimSpeed);
         GetComponent<MeshRenderer>().material.color =
                                         Color.Lerp(GetComponent<MeshRenderer>().material.color, newColor, hitEffectSpeed);
     }
@@ -96,12 +94,6 @@ public class Tile : MonoBehaviour
         tileFinalPosition = position;
     }
 
-    public IEnumerator DeactivateTile(float time = 5f)
-    {
-        yield return new WaitForSeconds(time);
-        gameObject.SetActive(false);
-    }
-
     private void OnMouseDown()
     {
         StartCoroutine(OnHitEffect(0.1f));
@@ -116,5 +108,19 @@ public class Tile : MonoBehaviour
             StartCoroutine(OnHitEffect(0.1f));
             tileSpawner.SpawnTileFromPool();
         }
+    }
+
+    private void MoveTile()
+    {
+        if (isLerpEnable)
+            transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileSpawnAnimSpeed);
+        else if (move)
+            transform.Translate(-Vector3.forward * moveSpeed * Time.deltaTime);
+
+    }
+
+    private void DisableLerp()
+    {
+        isLerpEnable = false;
     }
 }

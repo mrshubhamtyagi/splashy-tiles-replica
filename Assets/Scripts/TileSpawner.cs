@@ -22,13 +22,6 @@ public class TileSpawner : MonoBehaviour
     void Start()
     {
         SpawnTileFromPool();
-        SpawnTileFromPool();
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
     }
 
     void Update()
@@ -56,7 +49,7 @@ public class TileSpawner : MonoBehaviour
         bool _isTileAvailable = false;
         Transform _tile = null;
 
-        // Find a tile that is not active (means available to spawn)
+        // Find a tile that is not active (available to spawn)
         if (tiles.Count > 0)
         {
             foreach (Transform tile in tiles)
@@ -81,11 +74,10 @@ public class TileSpawner : MonoBehaviour
             print("New Tile is Generated");
         }
 
-        Vector3 _tilePos = GetNextPositionFromRange(); // get random position
+        Vector3 _tilePos = GetNextTileFixedPosition(); // get random position
         _tile.GetComponent<Tile>().SetTilePosition(_tilePos);
         _tile.localPosition = new Vector3(_tilePos.x, _tilePos.y, _tilePos.z + tileAnimDistance); // tile animation distance
         _tile.rotation = Quaternion.identity;
-
 
         // set tile color
         if (randomColor)
@@ -98,7 +90,6 @@ public class TileSpawner : MonoBehaviour
 
     public IEnumerator Co_ChangeTilesColor(Color newColor, float waitTime = 0.1f)
     {
-
         for (int i = 0; i < tiles.Count; i++)
         {
             if (!tiles[i].gameObject.activeSelf)
@@ -111,27 +102,35 @@ public class TileSpawner : MonoBehaviour
         }
     }
 
-
-    private Vector3 GetNextTilePosition()
-    {
-        Vector3 _position = new Vector3(Random.Range(-(tileOffset.x), tileOffset.x), prevTilePosition.y, tileOffset.z);
-        _position += prevTilePosition;
-
-        if (!randomX)
-            _position.x = 0;
-
-        prevTilePosition = _position;
-        return _position;
-    }
-
-    private Vector3 GetNextPositionFromRange()
+    private Vector3 GetNextTileFixedPosition()
     {
         Vector3 _position = Vector3.zero;
         float[] _range = new float[3] { -1.5f, 0f, 1.5f };
 
         int _randomNumber = GetRandomNumber(0, _range.Length);
 
-        while (Mathf.Abs(_prevNumber - _randomNumber) > 1
+        while (Mathf.Abs(_prevNumber - _randomNumber) != 1
+               || _prevNumber == _randomNumber)
+        {
+            _randomNumber = GetRandomNumber(0, _range.Length);
+        }
+        _prevNumber = _randomNumber;
+        _position = new Vector3(_range[_randomNumber], prevTilePosition.y, tileOffset.z);
+
+        if (!randomX)
+            _position.x = 0;
+
+        return _position;
+    }
+
+    private Vector3 GetNextTileRandomPosition()
+    {
+        Vector3 _position = Vector3.zero;
+        float[] _range = new float[3] { -1.5f, 0f, 1.5f };
+
+        int _randomNumber = GetRandomNumber(0, _range.Length);
+
+        while (Mathf.Abs(_prevNumber - _randomNumber) != 1
                || _prevNumber == _randomNumber)
         {
             _randomNumber = GetRandomNumber(0, _range.Length);
@@ -154,4 +153,5 @@ public class TileSpawner : MonoBehaviour
     {
         return Random.Range(start, end);
     }
+
 }
