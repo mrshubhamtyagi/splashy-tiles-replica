@@ -6,6 +6,8 @@ public class Ball : MonoBehaviour
 {
     public float sideSpeed;
     public float forwardSpeed;
+    public bool move = false;
+    public Vector3 gravity = Vector3.zero;
 
     private Rigidbody rb;
     private float inputHorizontal;
@@ -22,7 +24,7 @@ public class Ball : MonoBehaviour
 
     void Start()
     {
-
+        Physics.gravity = gravity;
     }
 
     void Update()
@@ -32,10 +34,20 @@ public class Ball : MonoBehaviour
 
     private void FixedUpdate()
     {
-        velocity.z = forwardSpeed * Time.fixedDeltaTime;
-        velocity.x = sideSpeed * inputHorizontal * Time.fixedDeltaTime;
+        //velocity.x = sideSpeed * inputHorizontal * Time.fixedDeltaTime;
+        //velocity.y = rb.velocity.y;
 
-        rb.velocity = velocity;
-        //rb.transform.position = new Vector3(Mathf.Clamp(rb.transform.position.x, -3f, 3f), Mathf.Clamp(rb.transform.position.y, -10f, 2f), rb.velocity.z);
+        //if (move)
+        //    velocity.z = rb.velocity.z * forwardSpeed * Time.fixedDeltaTime;
+        //else
+        //    velocity.z = rb.velocity.z;
+
+        //rb.velocity = velocity;
+        //rb.transform.position = new Vector3(Mathf.Camp(rb.transform.position.x, -3f, 3f), Mathf.Clamp(rb.transform.position.y, -10f, 2f), rb.velocity.z);
+    }
+
+    private void OnValidate()
+    {
+        Physics.gravity = gravity;
     }
 }

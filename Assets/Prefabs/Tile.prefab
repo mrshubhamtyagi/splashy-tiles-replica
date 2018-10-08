@@ -138,8 +138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccd533ee74ca448858a290c24f21f60f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  touchEffectSpeed: 0.1
-  tileAnimationSpeed: 0.1
+  hitEffectSpeed: 0.1
+  tileSpawnAnimSpeed: 0.3
+  force: 2
   newColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
 --- !u!212 &212586387334165160
 SpriteRenderer:

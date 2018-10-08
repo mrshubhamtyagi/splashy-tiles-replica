@@ -7,6 +7,7 @@ public class TileSpawner : MonoBehaviour
     public Transform tilePrefab;
     public Vector3 tileOffset; // next tile distance
     public float tileAnimDistance = 10f;
+    public bool randomX = false;
 
     [Header("Color Stuff")]
     public bool randomColor = true;
@@ -20,8 +21,8 @@ public class TileSpawner : MonoBehaviour
 
     void Start()
     {
-        //SpawnTileFromPool();
-        //SpawnTileFromPool();
+        SpawnTileFromPool();
+        SpawnTileFromPool();
         //SpawnTileFromPool();
         //SpawnTileFromPool();
         //SpawnTileFromPool();
@@ -39,8 +40,18 @@ public class TileSpawner : MonoBehaviour
             StartCoroutine(Co_ChangeTilesColor(tileColors[GetRandomNumber(0, tileColors.Length)], tilesColorChangeSpeed));
     }
 
+    public void AddToList(Tile tile)
+    {
+        tiles.Add(tile.transform);
+    }
+
+    public void RemoveFromList(Tile tile)
+    {
+        tiles.Remove(tile.transform);
+    }
+
     [ContextMenu("SpawnTile")]
-    private void SpawnTileFromPool()
+    public void SpawnTileFromPool()
     {
         bool _isTileAvailable = false;
         Transform _tile = null;
@@ -87,14 +98,15 @@ public class TileSpawner : MonoBehaviour
 
     public IEnumerator Co_ChangeTilesColor(Color newColor, float waitTime = 0.1f)
     {
+
         for (int i = 0; i < tiles.Count; i++)
         {
             if (!tiles[i].gameObject.activeSelf)
                 continue;
 
             yield return new WaitForSeconds(waitTime);
-            //tiles[i].GetComponent<MeshRenderer>().material.color = newColor;
-            tiles[i].GetComponent<Tile>().EffectColorSetup();
+            tiles[i].GetComponent<MeshRenderer>().material.color = newColor;
+            tiles[i].GetComponent<Tile>().FadeEffectSetup();
             tiles[i].GetComponent<Tile>().newColor = newColor;
         }
     }
@@ -104,6 +116,10 @@ public class TileSpawner : MonoBehaviour
     {
         Vector3 _position = new Vector3(Random.Range(-(tileOffset.x), tileOffset.x), prevTilePosition.y, tileOffset.z);
         _position += prevTilePosition;
+
+        if (!randomX)
+            _position.x = 0;
+
         prevTilePosition = _position;
         return _position;
     }
@@ -124,6 +140,10 @@ public class TileSpawner : MonoBehaviour
 
         _position.x = _range[_randomNumber];
         _position.z = prevTilePosition.z + tileOffset.z;
+
+        if (!randomX)
+            _position.x = 0;
+
         prevTilePosition = _position;
 
 

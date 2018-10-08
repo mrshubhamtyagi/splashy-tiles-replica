@@ -6,9 +6,12 @@ public class Tile : MonoBehaviour
 {
     public float hitEffectSpeed = 0.1f;
     public float tileSpawnAnimSpeed = 0.3f;
+    public float force = 2f;
 
-    private Vector3 tileFinalPosition;
     [HideInInspector] public Color newColor;
+    private Vector3 tileFinalPosition;
+    private TileSpawner tileSpawner;
+
 
     #region Touch Effect 
     private SpriteRenderer effectSpriteRenderer;
@@ -23,21 +26,28 @@ public class Tile : MonoBehaviour
             effectSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         else
             Debug.LogError("Sprite Renderer is missing");
+
+        tileSpawner = FindObjectOfType<TileSpawner>();
     }
 
     private void Start()
     {
-        EffectColorSetup();
+        FadeEffectSetup();
     }
 
     private void OnEnable()
     {
-        EffectColorSetup();
+        FadeEffectSetup();
 
         //StartCoroutine(DeactivateTile(10));
     }
 
-    public void EffectColorSetup()
+    private void OnDisable()
+    {
+        //tileSpawner.RemoveFromList(GetComponent<Tile>());
+    }
+
+    public void FadeEffectSetup()
     {
         tileColor = GetComponent<MeshRenderer>().material.color;
         newColor = tileColor;
@@ -67,12 +77,18 @@ public class Tile : MonoBehaviour
         effectSpriteRenderer.color = tileColor;
     }
 
-    public void OnHitEffect()
+    public IEnumerator OnHitEffect(float waitTime)
     {
+        yield return new WaitForSeconds(waitTime);
         effectSpriteRenderer.gameObject.SetActive(true);
         effectScale = Vector3.one * 30;
         colorAlpha = 0f;
+
+        yield return new WaitForSeconds(waitTime * 2);
         tileFinalPosition.y = -1f;
+
+        yield return new WaitForSeconds(2f);
+        gameObject.SetActive(false);
     }
 
     public void SetTilePosition(Vector3 position)
@@ -88,14 +104,17 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
-        OnHitEffect();
+        StartCoroutine(OnHitEffect(0.1f));
     }
 
     private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            OnHitEffect();
+            col.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * force, ForceMode.VelocityChange);
+            //col.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.forward * (force / 3.6f), ForceMode.VelocityChange);
+            StartCoroutine(OnHitEffect(0.1f));
+            tileSpawner.SpawnTileFromPool();
         }
     }
 }

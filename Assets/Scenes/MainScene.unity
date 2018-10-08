@@ -152,6 +152,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114616959571885368, guid: cc045a0ae59a4405f9c0fb074485a4d8,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114616959571885368, guid: cc045a0ae59a4405f9c0fb074485a4d8,
+        type: 2}
+      propertyPath: force
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc045a0ae59a4405f9c0fb074485a4d8, type: 2}
   m_IsPrefabAsset: 0
@@ -375,6 +385,16 @@ Prefab:
       propertyPath: tilePrefab
       value: 
       objectReference: {fileID: 1719708552}
+    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
+        type: 2}
+      propertyPath: randomColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114269468350773538, guid: 63f980a7962654dac9b4d092975f88be,
+        type: 2}
+      propertyPath: randomX
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63f980a7962654dac9b4d092975f88be, type: 2}
   m_IsPrefabAsset: 0
@@ -395,7 +415,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4774337984025470, guid: 5ac59cae216fa4596a5648ebd87edc28, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4774337984025470, guid: 5ac59cae216fa4596a5648ebd87edc28, type: 2}
       propertyPath: m_LocalRotation.x
@@ -420,6 +440,20 @@ Prefab:
     - target: {fileID: 1593324647033526, guid: 5ac59cae216fa4596a5648ebd87edc28, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 135269034476951366, guid: 5ac59cae216fa4596a5648ebd87edc28,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1593324647033526, guid: 5ac59cae216fa4596a5648ebd87edc28, type: 2}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 114917121645396650, guid: 5ac59cae216fa4596a5648ebd87edc28,
+        type: 2}
+      propertyPath: gravity.y
+      value: -9.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ac59cae216fa4596a5648ebd87edc28, type: 2}
