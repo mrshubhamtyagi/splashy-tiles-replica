@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 0}
   tileOffset: {x: 1.5, y: 0, z: 2}
-  tileAnimDistance: 10
+  tileAnimDistance: 20
   randomX: 0
   randomColor: 0
   tilesColorChangeSpeed: 0.01
@@ -67,3 +67,4 @@ MonoBehaviour:
   - {r: 0.19215685, g: 0.7674828, b: 1, a: 1}
   - {r: 0.19215685, g: 1, b: 0.753029, a: 1}
   - {r: 1, g: 1, b: 0.19215685, a: 1}
+  - {r: 0.13725491, g: 0.13725491, b: 0.13725491, a: 1}

@@ -8,9 +8,9 @@ public class Tile : MonoBehaviour
     public float tileSpawnAnimSpeed = 0.3f;
     public float force = 2f;
     public float moveSpeed = 2f;
-    public bool move;
+    public bool isStatic = false;
 
-    #region Touch Effect 
+    #region Touch Effect Attributes
     private SpriteRenderer effectSpriteRenderer;
     private Color32 tileColor;
     private Vector3 effectScale;
@@ -20,7 +20,11 @@ public class Tile : MonoBehaviour
     [HideInInspector] public Color newColor;
     private Vector3 tileFinalPosition;
     private TileSpawner tileSpawner;
-    private bool isLerpEnable;
+
+    public void SetTilePosition(Vector3 position)
+    {
+        tileFinalPosition = position;
+    }
 
     private void Awake()
     {
@@ -34,17 +38,11 @@ public class Tile : MonoBehaviour
 
     private void OnEnable()
     {
+        //tileFinalPosition = transform.localPosition;
         FadeEffectSetup();
-        isLerpEnable = true;
-        Invoke("DisableLerp", 0.2f);
     }
 
-    private void OnBecameInvisible()
-    {
-        gameObject.SetActive(false);
-        //tileSpawner.SpawnTileFromPool();
-    }
-
+    #region Effect Stuff
     public void FadeEffectSetup()
     {
         tileColor = GetComponent<MeshRenderer>().material.color;
@@ -56,16 +54,22 @@ public class Tile : MonoBehaviour
         effectSpriteRenderer.gameObject.SetActive(false);
     }
 
-    void Update()
+    public IEnumerator Co_OnHitEffect(float waitTime)
     {
-        EffectLerp();
-        MoveTile();
+        yield return new WaitForSeconds(waitTime);
+        effectSpriteRenderer.gameObject.SetActive(true);
+        effectScale = Vector3.one * 30;
+        colorAlpha = 0f;
+        GetComponent<MeshRenderer>().material.color = Color.black;
 
-        GetComponent<MeshRenderer>().material.color =
-                                        Color.Lerp(GetComponent<MeshRenderer>().material.color, newColor, hitEffectSpeed);
+        yield return new WaitForSeconds(waitTime * 2); // Lower the tile on hit
+        tileFinalPosition.y = -3f;
+
+        yield return new WaitForSeconds(1f); // Deactivate Tile
+        gameObject.SetActive(false);
     }
 
-    private void EffectLerp()
+    private void OnHitEffect()
     {
         // Scale
         effectSpriteRenderer.transform.localScale = Vector3.Lerp(effectSpriteRenderer.transform.localScale, effectScale, hitEffectSpeed);
@@ -74,29 +78,21 @@ public class Tile : MonoBehaviour
         tileColor.a = (byte)Mathf.Lerp(tileColor.a, colorAlpha, hitEffectSpeed);
         effectSpriteRenderer.color = tileColor;
     }
+    #endregion
 
-    public IEnumerator OnHitEffect(float waitTime)
+    private void MoveTile()
     {
-        yield return new WaitForSeconds(waitTime);
-        effectSpriteRenderer.gameObject.SetActive(true);
-        effectScale = Vector3.one * 30;
-        colorAlpha = 0f;
-
-        yield return new WaitForSeconds(waitTime * 2);
-        tileFinalPosition.y = -1f;
-
-        yield return new WaitForSeconds(2f);
-        gameObject.SetActive(false);
+        if (!isStatic)
+            transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileSpawnAnimSpeed);
     }
 
-    public void SetTilePosition(Vector3 position)
+    void Update()
     {
-        tileFinalPosition = position;
-    }
+        OnHitEffect();
+        MoveTile();
 
-    private void OnMouseDown()
-    {
-        StartCoroutine(OnHitEffect(0.1f));
+        GetComponent<MeshRenderer>().material.color =
+                                        Color.Lerp(GetComponent<MeshRenderer>().material.color, newColor, hitEffectSpeed);
     }
 
     private void OnCollisionEnter(Collision col)
@@ -104,23 +100,16 @@ public class Tile : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             col.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * force, ForceMode.VelocityChange);
-            //col.gameObject.GetComponent<Rigidbody>().AddForce(Vector3.forward * (force / 3.6f), ForceMode.VelocityChange);
-            StartCoroutine(OnHitEffect(0.1f));
+            StartCoroutine(Co_OnHitEffect(0.1f));
+
+            //if (tileSpawner.transform.childCount > 5)
             tileSpawner.SpawnTileFromPool();
         }
     }
 
-    private void MoveTile()
+    private IEnumerator DeactivateTile(float time = 1f)
     {
-        if (isLerpEnable)
-            transform.localPosition = Vector3.Lerp(transform.localPosition, tileFinalPosition, tileSpawnAnimSpeed);
-        else if (move)
-            transform.Translate(-Vector3.forward * moveSpeed * Time.deltaTime);
-
-    }
-
-    private void DisableLerp()
-    {
-        isLerpEnable = false;
+        yield return new WaitForSeconds(time);
+        gameObject.SetActive(false);
     }
 }

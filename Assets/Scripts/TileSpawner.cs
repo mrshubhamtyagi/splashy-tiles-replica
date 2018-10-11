@@ -6,7 +6,7 @@ public class TileSpawner : MonoBehaviour
 {
     public Transform tilePrefab;
     public Vector3 tileOffset; // next tile distance
-    public float tileAnimDistance = 10f;
+    public float tileAnimDistanceInZ = 10f;
     public bool randomX = false;
 
     [Header("Color Stuff")]
@@ -15,7 +15,7 @@ public class TileSpawner : MonoBehaviour
     public Color[] tileColors;
 
 
-    private Vector3 prevTilePosition;
+    private Vector3 prevTilePosition = Vector3.zero;
     private List<Transform> tiles = new List<Transform>(10);
     private int _prevNumber;
 
@@ -44,48 +44,50 @@ public class TileSpawner : MonoBehaviour
     }
 
     [ContextMenu("SpawnTile")]
-    public void SpawnTileFromPool()
+    public Transform SpawnTileFromPool()
     {
+        string tileStatus = "New Tile is Generated";
         bool _isTileAvailable = false;
         Transform _tile = null;
 
         // Find a tile that is not active (available to spawn)
         if (tiles.Count > 0)
         {
-            foreach (Transform tile in tiles)
+            foreach (Transform tile in transform)
             {
-                if (tile.gameObject.activeSelf)
+                if (tile.gameObject.activeSelf) // if tile is active skip it
                     continue;
-                else
-                {
-                    // ------------------------------------ if a tile is available
-                    _tile = tile;
-                    _isTileAvailable = true;
-                    break;
-                }
+
+                // ---------------------------- if a tile is available in the pool, use that tile
+                _tile = tile;
+                _isTileAvailable = true;
+                tileStatus = "Tile is Re-Generated";
+                break;
             }
         }
 
-        if (!_isTileAvailable || tiles.Count == 0) // ------------------ if no tile is available
+        // ------------------ if no tile is available to spawn, create a new tile
+        if (!_isTileAvailable || tiles.Count == 0)
         {
             _tile = Instantiate(tilePrefab);
             _tile.parent = transform;
             tiles.Add(_tile);
-            print("New Tile is Generated");
         }
 
-        Vector3 _tilePos = GetNextTileFixedPosition(); // get random position
+        Vector3 _tilePos = GetNextTileFixedPosition(); // get tile position
+        _tile.localPosition = new Vector3(_tilePos.x, _tilePos.y, _tilePos.z + tileAnimDistanceInZ); // add tile animation distance
         _tile.GetComponent<Tile>().SetTilePosition(_tilePos);
-        _tile.localPosition = new Vector3(_tilePos.x, _tilePos.y, _tilePos.z + tileAnimDistance); // tile animation distance
         _tile.rotation = Quaternion.identity;
 
         // set tile color
         if (randomColor)
             _tile.GetComponent<MeshRenderer>().material.color = tileColors[GetRandomNumber(0, tileColors.Length)];
-        else
-            _tile.GetComponent<MeshRenderer>().material.color = tileColors[0];
+        //else
+        //_tile.GetComponent<MeshRenderer>().material.color = tileColors[0];
 
         _tile.gameObject.SetActive(true);
+        print(tileStatus);
+        return _tile.transform;
     }
 
     public IEnumerator Co_ChangeTilesColor(Color newColor, float waitTime = 0.1f)
@@ -105,21 +107,24 @@ public class TileSpawner : MonoBehaviour
     private Vector3 GetNextTileFixedPosition()
     {
         Vector3 _position = Vector3.zero;
-        float[] _range = new float[3] { -1.5f, 0f, 1.5f };
+        float[] _rangeX = new float[3] { -1.5f, 0f, 1.5f }; // X positions
+        int _randomNumber = 1; //  1st position in the _range which is 0 is set by default
 
-        int _randomNumber = GetRandomNumber(0, _range.Length);
-
-        while (Mathf.Abs(_prevNumber - _randomNumber) != 1
-               || _prevNumber == _randomNumber)
+        // Find new random X position
+        if (randomX)
         {
-            _randomNumber = GetRandomNumber(0, _range.Length);
+            _randomNumber = GetRandomNumber(0, _rangeX.Length);
+            while (Mathf.Abs(_prevNumber - _randomNumber) != 1
+                   || _prevNumber == _randomNumber)
+            {
+                _randomNumber = GetRandomNumber(0, _rangeX.Length);
+            }
+            _prevNumber = _randomNumber;
         }
-        _prevNumber = _randomNumber;
-        _position = new Vector3(_range[_randomNumber], prevTilePosition.y, tileOffset.z);
 
-        if (!randomX)
-            _position.x = 0;
+        _position = new Vector3(_rangeX[_randomNumber], prevTilePosition.y, tileOffset.z + prevTilePosition.z);
 
+        prevTilePosition = _position;
         return _position;
     }
 
@@ -153,5 +158,4 @@ public class TileSpawner : MonoBehaviour
     {
         return Random.Range(start, end);
     }
-
 }

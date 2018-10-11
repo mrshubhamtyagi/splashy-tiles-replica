@@ -140,9 +140,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffectSpeed: 0.1
   tileSpawnAnimSpeed: 0.3
-  force: 1
+  force: 6
   moveSpeed: 10
-  move: 1
+  isStatic: 0
   newColor: {r: 1, g: 0.5019608, b: 0.5019608, a: 1}
 --- !u!212 &212586387334165160
 SpriteRenderer:
